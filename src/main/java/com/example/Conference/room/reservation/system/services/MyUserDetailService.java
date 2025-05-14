@@ -35,7 +35,7 @@ public class MyUserDetailService implements UserDetailsService {
     }
 
     private String[] getRoles(MyUser user) {
-        if(user.getRole().toString().equals("ADMIN")){
+        if(user.getUserRole().toString().equals("ADMIN")){
             return new String[]{"USER", "ADMIN"};
         }
         return new String[]{"USER"};

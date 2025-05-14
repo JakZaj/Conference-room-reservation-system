@@ -1,6 +1,6 @@
 package com.example.Conference.room.reservation.system.entities;
 
-import com.example.Conference.room.reservation.system.enums.Role;
+import com.example.Conference.room.reservation.system.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,21 +25,21 @@ public class MyUser implements UserDetails {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String email;
 
     @Column(unique = true, nullable = false)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole userRole;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.toString()));
+        authorities.add(new SimpleGrantedAuthority(userRole.toString()));
         return authorities;
     }
 

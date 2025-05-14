@@ -1,5 +1,6 @@
 package com.example.Conference.room.reservation.system.enums;
 
-public enum Role {
-        USER, ADMIN
+public enum UserRole {
+        USER,
+        ADMIN
 }
