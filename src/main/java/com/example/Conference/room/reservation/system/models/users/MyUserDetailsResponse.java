@@ -14,7 +14,7 @@ public class MyUserDetailsResponse {
         this.id = myUser.getId();
         this.username = myUser.getUsername();
         this.email = myUser.getEmail();
-        this.role = myUser.getRole().toString();
+        this.role = myUser.getUserRole().toString();
     }
 
     private Long id;

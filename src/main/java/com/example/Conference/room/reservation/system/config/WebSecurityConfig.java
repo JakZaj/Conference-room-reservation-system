@@ -20,7 +20,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers(new String[]{"/", "/user", "/admin", "/register/**"})
+                        request.requestMatchers(new String[]{"/users/register"})
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
