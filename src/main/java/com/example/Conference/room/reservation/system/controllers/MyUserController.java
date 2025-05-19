@@ -4,9 +4,7 @@ import com.example.Conference.room.reservation.system.entities.MyUser;
 import com.example.Conference.room.reservation.system.enums.UserRole;
 import com.example.Conference.room.reservation.system.models.users.RegisterRequest;
 import com.example.Conference.room.reservation.system.models.users.RegisterResponse;
-import com.example.Conference.room.reservation.system.repository.MyUserRepository;
 import com.example.Conference.room.reservation.system.services.MyUserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.MalformedURLException;
 
 @RestController
 @AllArgsConstructor
