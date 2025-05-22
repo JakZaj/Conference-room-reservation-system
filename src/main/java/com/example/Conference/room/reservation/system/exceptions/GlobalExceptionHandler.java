@@ -17,4 +17,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(RoomAlreadyBookedException.class)
+    public ResponseEntity<String> handleRoomAlreadyBooked(RoomAlreadyBookedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RoomDoesNotExistsException.class)
+    public ResponseEntity<String> handleRoomDoesNotExists(RoomDoesNotExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
