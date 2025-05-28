@@ -1,6 +1,5 @@
 package com.example.Conference.room.reservation.system.models.users;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,12 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AddRoomRequest {
+
     @NotBlank
-    @Email
-    private String email;
+    private String name;
+
     @NotBlank
-    private String userName;
+    private int capacity;
+
     @NotBlank
-    private String password;
+    private String location;
 }
