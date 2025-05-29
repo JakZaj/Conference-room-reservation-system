@@ -1,14 +1,30 @@
 package com.example.Conference.room.reservation.system.controllers;
 
+import com.example.Conference.room.reservation.system.entities.MyUser;
+import com.example.Conference.room.reservation.system.services.MyUserService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
+@AllArgsConstructor
+@Validated
 public class HomeController {
 
+    private MyUserService myUserService;
+
     @GetMapping("/")
-    public String home() {
-        return "Hello, World!";
+    public  ResponseEntity<List<MyUser>> home() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authenticated user: " + auth.getName());
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(myUserService.getAllUsers());
     }
 
     @GetMapping("/user")
