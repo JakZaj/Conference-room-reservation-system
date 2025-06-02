@@ -1,10 +1,12 @@
 package com.example.Conference.room.reservation.system.config;
 
+import com.example.Conference.room.reservation.system.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final ApplicationConfiguration applicationConfiguration;
+    private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
@@ -27,8 +29,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> {
                             request.requestMatchers("/users/register", "/users/login")
                                     .permitAll()
+                                    .requestMatchers("/admin/**").hasAuthority(UserRole.ADMIN.name())
+                                    .requestMatchers("/user/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
                                     .anyRequest()
                                     .authenticated();
+
                         }
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -36,7 +41,7 @@ public class WebSecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                         .accessDeniedHandler(new AccessDeniedHandlerImpl())
                 )
-                .authenticationProvider(applicationConfiguration.authenticationProvider())
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

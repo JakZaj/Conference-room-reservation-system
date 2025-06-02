@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @Validated
+@RequestMapping("user/test")
 public class HomeController {
 
     private MyUserService myUserService;
@@ -22,8 +24,6 @@ public class HomeController {
     @GetMapping("/")
     public  ResponseEntity<List<MyUser>> home() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Authenticated user: " + auth.getName());
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(myUserService.getAllUsers());
     }
 

@@ -1,5 +1,6 @@
 package com.example.Conference.room.reservation.system.models.users;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ public class AddRoomRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
+    @Min(1)
     private int capacity;
 
     @NotBlank

@@ -1,7 +1,6 @@
 package com.example.Conference.room.reservation.system.config;
 
 import com.example.Conference.room.reservation.system.repository.MyUserRepository;
-//import com.example.Conference.room.reservation.system.services.MyUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
