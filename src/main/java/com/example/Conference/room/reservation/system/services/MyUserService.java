@@ -20,14 +20,14 @@ public class MyUserService {
     private final MyUserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    public MyUser register(String email, String username, String password){
+    public MyUser register(String email, String nickname, String password){
         if (repository.findByEmail(email).isPresent())
             throw new EmailAlreadyExistsException();
-        if (repository.findByUsername(username).isPresent())
+        if (repository.findByNickname(nickname).isPresent())
             throw new UsernameAlreadyExistsException();
 
         String encodePassword = passwordEncoder.encode(password);
-        MyUser myUser = new MyUser(null, email, username, encodePassword, UserRole.USER);
+        MyUser myUser = new MyUser(null, email, nickname, encodePassword, UserRole.USER);
         return repository.save(myUser);
     }
 

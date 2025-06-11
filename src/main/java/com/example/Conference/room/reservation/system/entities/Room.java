@@ -21,4 +21,8 @@ public class Room {
     private int capacity;
 
     private String location;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private MyUser owner;
 }

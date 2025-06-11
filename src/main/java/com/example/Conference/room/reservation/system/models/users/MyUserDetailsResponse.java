@@ -12,13 +12,13 @@ public class MyUserDetailsResponse {
 
     public MyUserDetailsResponse(MyUser myUser) {
         this.id = myUser.getId();
-        this.username = myUser.getUsername();
+        this.nickname = myUser.getNickname();
         this.email = myUser.getEmail();
         this.role = myUser.getUserRole().toString();
     }
 
     private Long id;
-    private String username;
+    private String nickname;
     private String email;
     private String role;
 }

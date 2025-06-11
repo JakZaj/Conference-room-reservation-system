@@ -19,6 +19,11 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "users")
 public class MyUser implements UserDetails {
+
+    public MyUser(Long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +32,7 @@ public class MyUser implements UserDetails {
     private String email;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
