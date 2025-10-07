@@ -14,11 +14,9 @@ public class MyUserDetailsResponse {
         this.id = myUser.getId();
         this.nickname = myUser.getNickname();
         this.email = myUser.getEmail();
-        this.role = myUser.getUserRole().toString();
     }
 
     private Long id;
     private String nickname;
     private String email;
-    private String role;
 }

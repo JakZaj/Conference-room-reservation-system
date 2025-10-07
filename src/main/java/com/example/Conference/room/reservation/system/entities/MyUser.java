@@ -24,6 +24,12 @@ public class MyUser implements UserDetails {
         this.id = id;
     }
 
+    public MyUser(MyUser myUser) {
+        this.id = myUser.getId();
+        this.email = myUser.getEmail();
+        this.nickname = myUser.getNickname();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

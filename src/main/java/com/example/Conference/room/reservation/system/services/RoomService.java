@@ -2,6 +2,7 @@ package com.example.Conference.room.reservation.system.services;
 
 import com.example.Conference.room.reservation.system.entities.MyUser;
 import com.example.Conference.room.reservation.system.entities.Room;
+import com.example.Conference.room.reservation.system.enums.UserRole;
 import com.example.Conference.room.reservation.system.exceptions.RoomAlreadyExistsException;
 import com.example.Conference.room.reservation.system.exceptions.RoomDoesNotExistsException;
 import com.example.Conference.room.reservation.system.exceptions.UnauthorizedActionException;
@@ -63,16 +64,21 @@ public class RoomService {
         return roomRepository.findById(roomId).orElseThrow(RoomDoesNotExistsException::new);
     }
 
-    public void deleteRoom(Long roomId){
+    public void deleteRoom(Long roomId, MyUser currentUser){
         Room room = roomRepository.findById(roomId).orElseThrow(RoomDoesNotExistsException::new);
+
+        if (!room.getOwner().getId().equals(currentUser.getId()) && currentUser.getUserRole() != UserRole.ADMIN){
+            throw new UnauthorizedActionException();
+        }
+
         roomRepository.delete(room);
     }
 
-    public void updateEvent(Long roomId, String name, int capacity, String location, MyUser myUser){
+    public void updateEvent(Long roomId, String name, int capacity, String location, MyUser currentUser){
 
         Room existingRoom = getRoomById(roomId);
 
-        if (!existingRoom.getOwner().getId().equals(myUser.getId())){
+        if (!existingRoom.getOwner().getId().equals(currentUser.getId()) && currentUser.getUserRole() != UserRole.ADMIN){
             throw new UnauthorizedActionException();
         }
 

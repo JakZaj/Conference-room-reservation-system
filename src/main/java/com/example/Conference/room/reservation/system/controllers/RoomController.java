@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @AllArgsConstructor
 @Validated
-@RequestMapping("/admin/rooms")
+@RequestMapping("/user/rooms")
 public class RoomController {
 
     private RoomService roomService;
@@ -42,7 +42,7 @@ public class RoomController {
     public ResponseEntity<RoomResponse> addRoom(@Valid @RequestBody AddRoomRequest request) {
 
         MyUser auth = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser owner = new MyUser(auth.getId());
+        MyUser owner = new MyUser(auth);
 
         Room room = roomService.addRoom(request.getName(), request.getCapacity(), request.getLocation(), owner);
         return new ResponseEntity<>(new RoomResponse(room), HttpStatus.OK);
@@ -68,19 +68,23 @@ public class RoomController {
     @PutMapping("/{eventId}")
     public ResponseEntity<String> updateRoom(@PathVariable Long eventId, @RequestBody UpdateEventRequest request) {
         MyUser auth = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser loggedMyUser = new MyUser();
-        loggedMyUser.setId(auth.getId());
+        MyUser currentUser = new MyUser();
+        currentUser.setId(auth.getId());
+        currentUser.setUserRole(auth.getUserRole());
 
-        roomService.updateEvent(eventId, request.getName(), request.getCapacity(), request.getLocation(), loggedMyUser);
+        roomService.updateEvent(eventId, request.getName(), request.getCapacity(), request.getLocation(), currentUser);
 
         return new ResponseEntity<>("Room has been updated", HttpStatus.OK);
     }
 
     @DeleteMapping("/{roomId}")
     public ResponseEntity<String> deleteRoom(@PathVariable Long roomId) {
-//        MyUser auth = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser auth = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser currentUser = new MyUser();
+        currentUser.setId(auth.getId());
+        currentUser.setUserRole(auth.getUserRole());
 
-        roomService.deleteRoom(roomId);
+        roomService.deleteRoom(roomId, currentUser);
         return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
     }
 }
