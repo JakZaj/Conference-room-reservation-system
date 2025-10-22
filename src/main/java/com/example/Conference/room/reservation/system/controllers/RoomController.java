@@ -4,6 +4,7 @@ package com.example.Conference.room.reservation.system.controllers;
 import com.example.Conference.room.reservation.system.entities.MyUser;
 import com.example.Conference.room.reservation.system.entities.Room;
 import com.example.Conference.room.reservation.system.models.users.AddRoomRequest;
+import com.example.Conference.room.reservation.system.models.users.PageResponse;
 import com.example.Conference.room.reservation.system.models.users.RoomResponse;
 import com.example.Conference.room.reservation.system.services.RoomService;
 import com.example.Conference.room.reservation.system.events.UpdateEventRequest;
@@ -30,12 +31,25 @@ public class RoomController {
     private RoomService roomService;
 
     @GetMapping("/list")
-    public ResponseEntity<Page<RoomResponse>> getRooms(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<PageResponse<RoomResponse>> getRooms(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(required = false) String location){
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<Room> rooms = roomService.getRooms(pageable);
+        Page<Room> rooms = roomService.getRooms(pageable, location);
         Page<RoomResponse> responses = rooms.map(RoomResponse::new);
 
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+        PageResponse<RoomResponse> result = new PageResponse<>(
+                responses.getContent(),
+                responses.getNumber(),
+                responses.getSize(),
+                responses.getTotalElements(),
+                responses.getTotalPages(),
+                responses.isLast()
+        );
+
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/")

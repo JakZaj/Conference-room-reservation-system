@@ -8,10 +8,13 @@ import com.example.Conference.room.reservation.system.exceptions.RoomDoesNotExis
 import com.example.Conference.room.reservation.system.exceptions.UnauthorizedActionException;
 import com.example.Conference.room.reservation.system.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,33 +23,20 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public Page<Room> getRooms(Pageable pageable) {
-//        Specification<RoomResponse> spec = createSpecification
-        return roomRepository.findAll(pageable);
+    public Page<Room> getRooms(Pageable pageable, String location) {
+        Specification<Room> spec = createSpecification(location);
+        return roomRepository.findAll(spec, pageable);
     }
 
-//    private Specification<RoomResponse> createSpecification(Double latitude, Double longitude, Double distance, Boolean isActive, Boolean freePlaces) {
-//        return (root, query, cb) -> {
-//            List<Predicate> predicates = new ArrayList<>();
-//
-//            if (latitude != null && longitude != null && distance != null) {
-//                List<Location> locations = locationService.findLocationWithinDistance(latitude, longitude, distance);
-//
-//                predicates.add(root.get("location").in(locations));
-//
-//            }
-//
-//            if (isActive != null) {
-//                predicates.add(cb.equal(root.get("isActive"), isActive));
-//            }
-//
-//            if (freePlaces != null) {
-//                predicates.add(cb.equal(root.get("freePlaces"), freePlaces));
-//            }
-//
-//            return cb.and(predicates.toArray(new Predicate[0]));
-//        };
-//    }
+    private Specification<Room> createSpecification(String location) {
+        return (root, query, cb) -> {
+            if (location == null || location.isBlank()) {
+                return cb.conjunction();
+            }
+
+            return cb.equal(root.get("location"), location);
+        };
+    }
 
     public Room addRoom(String roomName, int roomCapacity, String roomLocation, MyUser owner){
         if (roomRepository.findByNameAndLocation(roomName, roomLocation).isPresent())
