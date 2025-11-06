@@ -10,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,6 +19,17 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "users")
 public class MyUser implements UserDetails {
+
+    public MyUser(Long id) {
+        this.id = id;
+    }
+
+    public MyUser(MyUser myUser) {
+        this.id = myUser.getId();
+        this.email = myUser.getEmail();
+        this.nickname = myUser.getNickname();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +38,7 @@ public class MyUser implements UserDetails {
     private String email;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
@@ -38,9 +48,12 @@ public class MyUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(userRole.toString()));
-        return authorities;
+        return List.of(new SimpleGrantedAuthority(userRole.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override

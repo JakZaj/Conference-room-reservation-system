@@ -19,6 +19,6 @@ public class ValidationExceptionHandler {
 
         ex.getAllErrors().forEach(err -> errors.add(err.getDefaultMessage()));
 
-        return new ResponseEntity<>(errors.get(0), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }
