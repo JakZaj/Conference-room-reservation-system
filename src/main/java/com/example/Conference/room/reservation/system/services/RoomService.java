@@ -8,13 +8,11 @@ import com.example.Conference.room.reservation.system.exceptions.RoomDoesNotExis
 import com.example.Conference.room.reservation.system.exceptions.UnauthorizedActionException;
 import com.example.Conference.room.reservation.system.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,7 +36,7 @@ public class RoomService {
         };
     }
 
-    public Room addRoom(String roomName, int roomCapacity, String roomLocation, MyUser owner){
+    public Room addRoom(String roomName, int roomCapacity, String roomLocation, MyUser owner) {
         if (roomRepository.findByNameAndLocation(roomName, roomLocation).isPresent())
             throw new RoomAlreadyExistsException();
 
@@ -46,29 +44,29 @@ public class RoomService {
         return roomRepository.save(room);
     }
 
-    public List<Room> findAllUserRooms(MyUser myUser){
+    public List<Room> findAllUserRooms(MyUser myUser) {
         return roomRepository.findByOwner(myUser);
     }
 
-    public Room getRoomById(Long roomId){
+    public Room getRoomById(Long roomId) {
         return roomRepository.findById(roomId).orElseThrow(RoomDoesNotExistsException::new);
     }
 
-    public void deleteRoom(Long roomId, MyUser currentUser){
+    public void deleteRoom(Long roomId, MyUser requestedUser) {
         Room room = roomRepository.findById(roomId).orElseThrow(RoomDoesNotExistsException::new);
 
-        if (!room.getOwner().getId().equals(currentUser.getId()) && currentUser.getUserRole() != UserRole.ADMIN){
+        if (!room.getOwner().getId().equals(requestedUser.getId()) && requestedUser.getUserRole() != UserRole.ADMIN) {
             throw new UnauthorizedActionException();
         }
 
         roomRepository.delete(room);
     }
 
-    public void updateEvent(Long roomId, String name, int capacity, String location, MyUser currentUser){
+    public void updateRoom(Long roomId, String name, int capacity, String location, MyUser requestedUser) {
 
         Room existingRoom = getRoomById(roomId);
 
-        if (!existingRoom.getOwner().getId().equals(currentUser.getId()) && currentUser.getUserRole() != UserRole.ADMIN){
+        if (!existingRoom.getOwner().getId().equals(requestedUser.getId()) && requestedUser.getUserRole() != UserRole.ADMIN) {
             throw new UnauthorizedActionException();
         }
 
