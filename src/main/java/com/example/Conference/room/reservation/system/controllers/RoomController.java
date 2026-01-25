@@ -3,11 +3,11 @@ package com.example.Conference.room.reservation.system.controllers;
 
 import com.example.Conference.room.reservation.system.entities.MyUser;
 import com.example.Conference.room.reservation.system.entities.Room;
+import com.example.Conference.room.reservation.system.models.room.UpdateRoomRequest;
 import com.example.Conference.room.reservation.system.models.users.AddRoomRequest;
 import com.example.Conference.room.reservation.system.models.users.PageResponse;
 import com.example.Conference.room.reservation.system.models.users.RoomResponse;
 import com.example.Conference.room.reservation.system.services.RoomService;
-import com.example.Conference.room.reservation.system.events.UpdateEventRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ public class RoomController {
     public ResponseEntity<PageResponse<RoomResponse>> getRooms(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size,
-            @RequestParam(required = false) String location){
+            @RequestParam(required = false) String location) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Room> rooms = roomService.getRooms(pageable, location);
@@ -79,14 +79,14 @@ public class RoomController {
         return new ResponseEntity<>(roomResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/{eventId}")
-    public ResponseEntity<String> updateRoom(@PathVariable Long eventId, @RequestBody UpdateEventRequest request) {
+    @PutMapping("/{roomId}")
+    public ResponseEntity<String> updateRoom(@PathVariable Long roomId, @RequestBody UpdateRoomRequest request) {
         MyUser auth = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser currentUser = new MyUser();
-        currentUser.setId(auth.getId());
-        currentUser.setUserRole(auth.getUserRole());
+        MyUser requestedUser = new MyUser();
+        requestedUser.setId(auth.getId());
+        requestedUser.setUserRole(auth.getUserRole());
 
-        roomService.updateEvent(eventId, request.getName(), request.getCapacity(), request.getLocation(), currentUser);
+        roomService.updateRoom(roomId, request.getName(), request.getCapacity(), request.getLocation(), requestedUser);
 
         return new ResponseEntity<>("Room has been updated", HttpStatus.OK);
     }
@@ -94,11 +94,11 @@ public class RoomController {
     @DeleteMapping("/{roomId}")
     public ResponseEntity<String> deleteRoom(@PathVariable Long roomId) {
         MyUser auth = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser currentUser = new MyUser();
-        currentUser.setId(auth.getId());
-        currentUser.setUserRole(auth.getUserRole());
+        MyUser requestedUser = new MyUser();
+        requestedUser.setId(auth.getId());
+        requestedUser.setUserRole(auth.getUserRole());
 
-        roomService.deleteRoom(roomId, currentUser);
+        roomService.deleteRoom(roomId, requestedUser);
         return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
     }
 }

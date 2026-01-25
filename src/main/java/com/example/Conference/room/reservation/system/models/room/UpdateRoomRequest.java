@@ -1,4 +1,4 @@
-package com.example.Conference.room.reservation.system.events;
+package com.example.Conference.room.reservation.system.models.room;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateEventRequest {
+public class UpdateRoomRequest {
 
     @NotBlank
     private String name;
